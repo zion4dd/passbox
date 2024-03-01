@@ -4,4 +4,4 @@ dist/
 *.bin
 *.spec
 __pycache__/
-
+_enigma.py

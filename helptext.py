@@ -1,10 +1,18 @@
 class Helptext:
-    hello = ['Good day!', 'Nice to see you!', 'Can I help you?', 'It will be our secret..', 
-            'They are watching you..', 'Even the walls have ears.', 'Lets hide something..', 'Watch your back!',
-            'The paranoid is never entirely mistaken. -Sigmund Freud', 
-            'Just because youre paranoid doesnt mean they arent after you. -Kurt Cobain',
-            'I wanna smoke pot, but I cant, cause Im too paranoid. -Drew Berrymore',
-            'Its amazing where the paranoid mind can take you. -Bill Ayers']
+    hello = [
+        "Good day!",
+        "Nice to see you!",
+        "Can I help you?",
+        "It will be our secret..",
+        "They are watching you..",
+        "Even the walls have ears.",
+        "Lets hide something..",
+        "Watch your back!",
+        "The paranoid is never entirely mistaken. -Sigmund Freud",
+        "Just because youre paranoid doesnt mean they arent after you. -Kurt Cobain",
+        "I wanna smoke pot, but I cant, cause Im too paranoid. -Drew Berrymore",
+        "Its amazing where the paranoid mind can take you. -Bill Ayers",
+    ]
 
     help_text = """Data storage: 'passbox.bin'.\n
     Load your data:\n- enter 'key'\n- press 'load'.\n

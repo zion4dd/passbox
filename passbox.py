@@ -9,7 +9,7 @@ import customtkinter
 from enigma import Enigma
 from helptext import Helptext
 
-DEV = True
+DEV = False
 
 END = "end"
 NORMAL = "normal"
