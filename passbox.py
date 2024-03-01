@@ -210,7 +210,6 @@ class App(customtkinter.CTk):
         pin = self.pin_entry.get()
         if pin.isdigit() and len(pin) == 4:
             CONTROL = Enigma.control(pin)
-            # Enigma.control(pin:str)->str - generates CONTROL with pin
             self.DICT = {CONTROL: ['', ''], 'passbox': ['pin', pin]}
             self.save_dict()
             self.interface_enable()
