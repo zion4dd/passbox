@@ -1,7 +1,7 @@
 # passbox
 
 This is a public version with no crypt algorithm.
-Put your own algorithm to enigma.py.
+Put your own algorithm to utils.py.
 
 ---
 
@@ -23,4 +23,5 @@ To build 'passbox.exe' follow the instructions:
 `./build`
 
 - look for 'passbox.exe' in 'dist' directory.
+
 - enjoy it!

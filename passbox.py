@@ -6,8 +6,8 @@ from time import sleep
 
 import customtkinter
 
-from enigma import Enigma
-from helptext import Helptext
+import helptext as H
+from utils import crypt_word, hash_pin
 
 DEV = False
 
@@ -33,7 +33,7 @@ class App(customtkinter.CTk):
 
         self.title("Passbox - Keeps your login/pass encrypted and safe")
         self.resizable(False, False)
-        self.geometry("+70+70")  # 'width x height + left + top'
+        self.geometry("+0+70")  # "width x height + left + top"
         self.protocol("WM_DELETE_WINDOW", self.on_closing)
         # call .on_closing() when app gets closed
 
@@ -54,16 +54,16 @@ class App(customtkinter.CTk):
         # ============ frame_left ============
 
         self.label_left = customtkinter.CTkLabel(
-            master=self.frame_left, text="app : [login] [pass]", font=self.font
+            master=self.frame_left, text="app : login : pass", font=self.font
         )
         self.label_left.grid(row=1, column=0, pady=5, padx=10, sticky="w")
 
         self.text = customtkinter.CTkTextbox(
-            master=self.frame_left, width=600, height=400, font=self.font
+            master=self.frame_left, width=700, height=400, font=self.font
         )
         self.text.grid(row=2, column=0, pady=10, padx=10)
 
-        self.text.insert("1.0", random.choice(Helptext.hello))
+        self.text.insert("1.0", random.choice(H.hello))
 
         # ============ frame_right ============ column0
 
@@ -84,7 +84,7 @@ class App(customtkinter.CTk):
 
         self.frame_right.grid_rowconfigure(9, weight=1)  # empty row as spacing
         self.frame_right.grid_rowconfigure(11, minsize=5)  # empty row as spacing
-        # 0
+        # 0 row
         self.key_chbox_var = customtkinter.IntVar(value=1)
         self.key_chbox = customtkinter.CTkCheckBox(
             master=self.frame_right,
@@ -93,23 +93,23 @@ class App(customtkinter.CTk):
             command=self.hide_key,
         )
         self.key_chbox.grid(row=0, column=1, pady=10, padx=10)
-        # 1
+        # 1 row
         self.key_entry_var = customtkinter.StringVar()
         self.key_entry = customtkinter.CTkEntry(
             master=self.frame_right, textvariable=self.key_entry_var
         )
         self.key_entry.grid(row=1, column=1, pady=5, padx=10)
-        # 2
+        # 2 row
         self.load_btn = customtkinter.CTkButton(
             master=self.frame_right, text="show", command=self.show_dict
         )
         self.load_btn.grid(row=2, column=1, pady=5, padx=10)
-        # 3
+        # 3 row
         self.add_btn = customtkinter.CTkButton(
             master=self.frame_right, text="add", command=self.add
         )
         self.add_btn.grid(row=3, column=1, pady=5, padx=10)
-        # 4
+        # 4 row
         self.app_entry_var = customtkinter.StringVar()
         self.app_entry = customtkinter.CTkEntry(
             master=self.frame_right, textvariable=self.app_entry_var
@@ -117,7 +117,7 @@ class App(customtkinter.CTk):
         self.app_entry.grid(
             row=4, column=1, pady=5, padx=10, columnspan=2, sticky="nsew"
         )
-        # 5
+        # 5 row
         self.login_entry_var = customtkinter.StringVar()
         self.login_entry = customtkinter.CTkEntry(
             master=self.frame_right, textvariable=self.login_entry_var
@@ -125,7 +125,7 @@ class App(customtkinter.CTk):
         self.login_entry.grid(
             row=5, column=1, pady=5, padx=10, columnspan=2, sticky="nsew"
         )
-        # 6
+        # 6 row
         self.pass_entry_var = customtkinter.StringVar()
         self.pass_entry = customtkinter.CTkEntry(
             master=self.frame_right, textvariable=self.pass_entry_var
@@ -133,7 +133,7 @@ class App(customtkinter.CTk):
         self.pass_entry.grid(
             row=6, column=1, pady=5, padx=10, columnspan=2, sticky="nsew"
         )
-        # 10
+        # 10 row
         self.optionmenu = customtkinter.CTkOptionMenu(
             master=self.frame_right,
             values=["Light", "Dark", "System"],
@@ -142,7 +142,7 @@ class App(customtkinter.CTk):
         self.optionmenu.grid(row=10, column=1, pady=5, padx=10)
 
         # ============ frame_right ============ column2
-        # 0
+        # 0 row
         self.pin_chbox_var = customtkinter.IntVar(value=1)
         self.pin_chbox = customtkinter.CTkCheckBox(
             master=self.frame_right,
@@ -151,28 +151,28 @@ class App(customtkinter.CTk):
             command=self.hide_pin,
         )
         self.pin_chbox.grid(row=0, column=2, pady=5)
-        # 1
+        # 1 row
         self.pin_entry_var = customtkinter.StringVar()
         self.pin_entry = customtkinter.CTkEntry(
             master=self.frame_right, textvariable=self.pin_entry_var
         )
         self.pin_entry.grid(row=1, column=2, pady=5, padx=10)
-        # 2
+        # 2 row
         self.new_btn = customtkinter.CTkButton(
             master=self.frame_right, text="new", command=self.new_button
         )
         self.new_btn.grid(row=2, column=2, pady=5, padx=10)
-        # 3
+        # 3 row
         self.del_btn = customtkinter.CTkButton(
             master=self.frame_right, text="del", command=self.delete
         )
         self.del_btn.grid(row=3, column=2, pady=5, padx=10)
-        # 10
+        # 10 row
         self.help_btn = customtkinter.CTkButton(
             master=self.frame_right,
             width=3,
             text="?",
-            command=lambda: self.text_print(Helptext.help_text),
+            command=lambda: self.text_print(H.help_text),
         )
         self.help_btn.grid(row=10, column=2, pady=5, padx=10)
 
@@ -233,15 +233,17 @@ class App(customtkinter.CTk):
 
     def new_button(self):
         sleep(0.3)
-        "creates dict with CONTROL value"
+        "creates dict with hashed_pin"
         pin = self.pin_entry.get()
         if pin.isdigit() and len(pin) == 4:
-            CONTROL = Enigma.control(pin)
-            # Enigma.control(pin:str)->str - generates CONTROL with pin
-            self.DICT = {CONTROL: ["", ""], "passbox": ["pin", pin]}  # write CONTROL
+            hashed_pin = hash_pin(pin)
+            self.DICT = {
+                hashed_pin: ["", ""],
+                "passbox": ["pin", pin],
+            }  # write hashed_pin
             self.save_dict()
             self.interface_enable()
-            self.text_print(Helptext.help_text_2)
+            self.text_print(H.help_text_2)
         else:
             self.text_print("Pin doesn't match!\nEnter 4 digits! (example: 1234)")
 
@@ -249,17 +251,19 @@ class App(customtkinter.CTk):
         "shows dict in textbox"
         sleep(0.3)
         self.load_dict()
-        text_string = ""
-        for i, j in sorted(self.DICT.items()):
-            if j[0] != "" and j[1] != "":
-                text_string += f"{i} : [{j[0]}] [{j[1]}]\n"
+        lst = [
+            f"{i} : {j[0]} : {j[1]}"
+            for i, j in sorted(self.DICT.items())
+            if j[0] or j[1]
+        ]
+        text_string = "\n".join(lst)
         self.text_print(text_string)
 
     def add(self):
         "добаляет запись в словарь"
         sleep(0.3)
-        CONTROL = Enigma.control(self.pin_entry.get())
-        if CONTROL in self.DICT:  # check CONTROL
+        hashed_pin = hash_pin(self.pin_entry.get())
+        if hashed_pin in self.DICT:
             self.DICT[self.app_entry.get()] = [
                 self.login_entry.get(),
                 self.pass_entry.get(),
@@ -273,8 +277,8 @@ class App(customtkinter.CTk):
     def delete(self):
         "удаляет запись из словаря"
         sleep(0.3)
-        CONTROL = Enigma.control(self.pin_entry.get())
-        if CONTROL in self.DICT:  # check CONTROL
+        hashed_pin = hash_pin(self.pin_entry.get())
+        if hashed_pin in self.DICT:
             self.DICT.pop(self.app_entry.get(), None)
             self.clear()
             self.save_dict()
@@ -296,7 +300,7 @@ class App(customtkinter.CTk):
             # print('C_DICT', self.C_DICT, '\nDICT', self.DICT)  #test
         except FileNotFoundError:
             self.interface_disable()
-            self.text_print(Helptext.help_text_1)
+            self.text_print(H.help_text_1)
 
     def save_dict(self):
         """кодирует и сохраняет словарь"""
@@ -310,13 +314,13 @@ class App(customtkinter.CTk):
     def crypt_dict(self, indict: dict) -> dict:
         """кодирует/декодирует словарь"""
         key = self.key_entry.get()
-        outdict = {}
-        for i, j in indict.items():
-            outdict[Enigma.crypt_word(i, key)] = [
-                Enigma.crypt_word(j[0], key),
-                Enigma.crypt_word(j[1], key),
+        outdict = {
+            crypt_word(i, key): [
+                crypt_word(j[0], key),
+                crypt_word(j[1], key),
             ]
-        # Enigma.crypt_word(word:str, key:str)->str - crypt/encrypt word with key
+            for i, j in indict.items()
+        }
         return outdict
 
     def text_print(self, text):
