@@ -1,4 +1,6 @@
 import hashlib
+from random import sample
+from string import ascii_letters
 
 
 def hash_pin(pin: str) -> str:
@@ -7,14 +9,12 @@ def hash_pin(pin: str) -> str:
 
 def crypt_word(inword: str, key: str) -> str:
     "crypt/encrypt word using key"
+    key = "".join(sample(ascii_letters, 50)) if not key else key
     outword = inword
-    key = "somekey" if not key else key
 
-    # Put your algorithm here
-    # Example:
-    # x = sum([ord(i) for i in key])
-    # outword = ''
-    # for i in inword:
-    #     outword += chr(ord(i) + x)
+    # Put your crypt algorithm here
+    # BAD Example:
+    # x = sum([ord(i) for i in key]) // len(key)
+    # outword = ''.join([chr(ord(i) + x) for i in inword])
 
     return outword

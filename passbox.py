@@ -16,7 +16,7 @@ NORMAL = "normal"
 DISABLED = "disabled"
 BINFILE = "passbox.bin"
 ICOFILE = "passbox.ico"
-
+OUTPUT = "{app} : {login} : {password}"
 
 customtkinter.set_appearance_mode("System")
 # Modes: "System" (standard), "Dark", "Light"
@@ -54,7 +54,9 @@ class App(customtkinter.CTk):
         # ============ frame_left ============
 
         self.label_left = customtkinter.CTkLabel(
-            master=self.frame_left, text="app : login : pass", font=self.font
+            master=self.frame_left,
+            text=OUTPUT.format(app="app", login="login", password="pass"),
+            font=self.font,
         )
         self.label_left.grid(row=1, column=0, pady=5, padx=10, sticky="w")
 
@@ -252,7 +254,7 @@ class App(customtkinter.CTk):
         sleep(0.3)
         self.load_dict()
         lst = [
-            f"{i} : {j[0]} : {j[1]}"
+            OUTPUT.format(app=i, login=j[0], password=j[1])
             for i, j in sorted(self.DICT.items())
             if j[0] or j[1]
         ]
@@ -263,7 +265,7 @@ class App(customtkinter.CTk):
         "добаляет запись в словарь"
         sleep(0.3)
         hashed_pin = hash_pin(self.pin_entry.get())
-        if hashed_pin in self.DICT:
+        if hashed_pin in self.DICT and self.key_entry.get():
             self.DICT[self.app_entry.get()] = [
                 self.login_entry.get(),
                 self.pass_entry.get(),
