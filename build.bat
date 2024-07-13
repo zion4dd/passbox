@@ -23,4 +23,3 @@ pause
 @REM -F --onefile / -D --onedir
 @REM -i filename.ico
 @REM --add-data "SRC;DEST" --- This option can be used multiple times.
-
